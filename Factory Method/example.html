@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        (function(){
+            var Btnfactory = function(name){
+                this.name = name;
+                this.method = function(){
+                    console.log("这是父类构造函数");
+                }
+            };
+            Btnfactory.prototype = {
+                constructor: Btnfactory,
+                showBtn:function(type){
+                    var btn = this.createBtn(type);
+                    btn.methodA();
+                    btn.methodB();
+                },
+                createBtn:function(type){
+                    throw new Error("无法直接实例化抽象父类")
+                }
+            };
+            //原型继承
+            function extend(Childclass,Superclass){
+                //设置一个空函数
+                var F = function(){};
+                //设置空函数原型为超类原型
+                F.prototype = Superclass.prototype;
+                Childclass.prototype = new F();
+                Childclass.prototype.constructor = Childclass;
+                Childclass.superClass = Superclass.prototype;
+                if(Childclass.prototype.constructor === Object.prototype.constructor){
+                    Childclass.prototype.constructor = Childclass;
+                }
+            }
+            // var test = new Btnfactory("test");
+            // console.log(test.showBtn("close"))
+            var alertBtn = function(name){
+                this.name = name;
+                //继承父类构造函数的属性和方法
+                Btnfactory.call(this,name);
+            }
+            //继承父类原型方法
+            extend(alertBtn,Btnfactory);
+            alertBtn.prototype.createBtn = function(){
+                var methodA = function(){
+                    console.log(this)
+                };
+                var methodB = function(){
+                    console.log(this)
+                }
+                return {
+                    methodA:methodA,
+                    methodB:methodB
+                }
+            };
+            var btn = new alertBtn("alert");
+            console.log(btn)
+        })()
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+    <button>test</button>
+    <script>
+        (function(){
+            //装饰模式，在不改变某个对象的前提下，动态添加属性和方法
+            Function.prototype.before = function(beforefn){
+                var __self = this;
+                return function(){
+                    beforefn.apply(this,arguments);
+                    return __self.apply(this,arguments);
+                }
+            };
+            Function.prototype.after = function(afterfn){
+                var __self = this;
+                return function(){
+                    var ret = __self.apply(this,arguments);
+                    afterfn.apply(this,arguments);
+                    return ret
+                }
+            };
+        })();
+        var fn1 = function(){
+            console.log("fn1");
+        }
+        var log = function(){
+            console.log("after");
+        }
+        var log1 = function(){
+            console.log("before")
+        }
+        var test = fn1.after(log).before(log1)
+        document.querySelector('button').onclick = test
+    </script>       
+</body>
+</html>

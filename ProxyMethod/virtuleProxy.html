@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>虚拟代理---图片懒加载</title>
+</head>
+<body>
+    <script>
+        (function(){
+            let ImgEle = (function(){
+                let node = document.createElement('img');
+                document.body.appendChild(node);
+                return {
+                    setSrc:function(src){
+                        node.src = src;
+                    }
+                }
+            })();
+            let proxy = (function(){
+                let image = new Image();
+                image.onload = function(){
+                    ImgEle.setSrc(this.src);
+                }
+                return {
+                    setSrc:function(src){
+                        image.src = src;
+                        ImgEle.setSrc('loading.gif')
+                    }
+                }
+            })();
+            proxy.setSrc('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1537248061974&di=78fca71ab5dede4219af3e3e257d4087&imgtype=0&src=http%3A%2F%2Fi2.hdslb.com%2Fbfs%2Fface%2F49aca6d75072ec257872a1ea165b22a07bd3fcf1.jpg');
+        })();
+    </script>
+</body>
+</html>

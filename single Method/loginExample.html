@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *,html,body{padding:0;margin: 0;border:none;font-size:16px;}
+        a{text-decoration: none;}
+        ul li{list-style: none;}
+        .login-box{width:50%;height:50%;position: absolute;margin:-25% -25%;top:50%;left:50%;box-shadow: 0 0 20px #666666;text-align: center;}
+        .login-box>p{font-size:1.8rem;color:powderblue;}
+        button{border:none;background:none;border-radius: 10px;padding:.5em 2em;border:1px solid #eeeeee;background:#666666;color:#ffffff;font-weight: bold;outline: none;cursor: pointer;}
+        .show{animation: show 1s ease 0s 1 normal forwards;}
+        .show>p{animation: toBigger 1s ease 0s 1 normal forwards;}
+        .hide{animation: hide 1s ease 0s 1 normal forwards;}
+        .hide>p{animation: toSmaller 1s ease 0s 1 normal forwards;}
+        .showbtn{border-color: #ff0000;background: #ff0000;}
+        .changethemebtn{border-color: aqua;background: aqua;}
+        @keyframes show{
+            from{
+                width:0%;
+                height:0%;
+                margin:0 0;
+            }to{
+                width:50%;
+                height:50%;
+                margin:-25% -25%;
+            }
+        }
+        @keyframes hide{
+            from{
+                width: 50%;
+                height:50%;
+                margin:-25% -25%;
+            }to{
+                width:0;
+                height:0;
+                margin:0 0;
+            }
+        }
+        @keyframes toBigger{
+            from{
+                font-size:0rem;
+            }to{
+                font-size:1.8rem;
+            }
+        }
+        @keyframes toSmaller{
+            from{
+                font-size: 1.8rem;
+            }to{
+                font-size:0rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="showbtn">show</button>
+    <button class="hidebtn">close</button>
+    <button class="changethemebtn">changeTheme</button>
+    <script>
+        (function(){
+            var logincls = function(name,id,theme){
+                this.name = name;
+                this.id = id;
+                this.theme = theme;
+            };
+            logincls.prototype = {
+                close:function(o){
+                    o.className = "";
+                    o.className = "login-box hide";
+                },
+                open:function(o){
+                    o.className = "";
+                    o.className = "login-box show";
+                },
+                init:function(id){
+                    var oDiv = document.createElement('div');
+                    oDiv.className = "login-box show";
+                    oDiv.innerHTML = "<p>show</p>";
+                    oDiv.id = id;
+                    return oDiv;
+                },
+                render:function(o){
+                    document.body.appendChild(o);
+                },
+                changeTheme:function(o,theme){
+                    console.log(theme);
+                    o.style.boxShadow = "0 0 15px " + theme;
+                }
+            };
+            var Single = (function(name,id,theme){
+                var instance;
+                function init(name,id,theme){
+                    var login = new logincls(name,id,theme);
+                    var o = login.init(login.id);
+                    login.render(o);
+
+                    return {
+                        open: function(){
+                            login.open(o)
+                        },
+                        close:function(){
+                            login.close(o)
+                        },
+                        changeTheme:function(theme){
+                            login.changeTheme(o,theme)
+                        }
+                    }
+                }
+                return {
+                    getInstance : function(){
+                        if(!instance){
+                            instance = init(name,theme,id);
+                        }
+                        return instance
+                    }
+                }
+            })();
+            var selectColor = function(){
+                return  '#' + (function(color){
+                    while(color.length<=5){
+                        color +=  '0123456789abcdef'[Math.floor(Math.random()*16)];
+                    }
+                    return color;
+                })('');     
+            }
+            var single = null;
+            document.querySelector('.showbtn').onclick = function(){
+                if(!single){
+                    single = Single.getInstance();
+                }else{
+                    single.open();
+                }
+            }
+            document.querySelector('.hidebtn').onclick = function(){
+                single.close();
+            }
+            document.querySelector('.changethemebtn').onclick = function(){
+                single.changeTheme(selectColor());
+            }
+        })()
+    </script>
+</body>
+</html>

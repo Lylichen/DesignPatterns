@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button>write</button>
+    <p></p>
+    <script>
+        (function(){
+            var SingleExp = (function(){
+                var instance;
+                function init(){
+                    return document.querySelector('p').innerText += "单例模式";
+                }
+                return{
+                    getInstance:function(){
+                        if(!instance){
+                            instance = init();
+                        }
+                        return instance;
+                    }
+                }
+            })();
+            document.querySelector('button').onclick = function(){
+                SingleExp.getInstance();
+            }
+        })();
+    </script>
+</body>
+</html>

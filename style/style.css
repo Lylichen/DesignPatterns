@@ -1,0 +1,6 @@
+*,html,body{padding:0;margin: 0;border:none;font-size:16px;}
+a{text-decoration: none;}
+ul li{list-style: none;}
+.login-box{width:50%;height:50%;position: absolute;margin:-25% -25%;top:50%;left:50%;box-shadow: 0 0 20px #666666;text-align: center;}
+.login-box>p{font-size:1.8rem;color:powderblue;}
+button{border:none;background:none;border-radius: 10px;padding:.5em 2em;border:1px solid #eeeeee;background:#666666;color:#ffffff;font-weight: bold;outline: none;cursor: pointer;}
